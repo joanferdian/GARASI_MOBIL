@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>GARASI MOBIL — Koleksi Pribadi</title>
+<meta name="theme-color" content="#262a31">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%23262a31'/%3E%3Cpath d='M20 62 L28 44 Q32 38 40 38 L60 38 Q68 38 72 44 L80 62 L80 72 Q80 76 76 76 L70 76 Q66 76 66 72 L66 68 L34 68 L34 72 Q34 76 30 76 L24 76 Q20 76 20 72 Z' fill='%23ff7a29'/%3E%3Ccircle cx='32' cy='68' r='7' fill='%23262a31'/%3E%3Ccircle cx='68' cy='68' r='7' fill='%23262a31'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#262a31; --bg-panel:#2f343c; --bg-panel-2:#383e47;
+    --steel:#e4e8ec; --steel-dim:#9aa1ab; --border:#454c56;
+    --accent:#ff7a29; --accent-dark:#d9631c; --accent-2:#c8102e; --success:#2ea043;
+    --plate-bg:#f3efe3; --plate-ink:#20242b;
+    --font-display:'Oswald',sans-serif; --font-body:'Inter',sans-serif; --font-mono:'JetBrains Mono',monospace;
+    --radius:10px; --shadow:0 8px 24px rgba(0,0,0,.35);
+  }
+  html.light{
+    --bg:#eef0f2; --bg-panel:#ffffff; --bg-panel-2:#f5f6f8;
+    --steel:#20242b; --steel-dim:#5b6270; --border:#d7dbe0;
+    --plate-bg:#ffffff; --plate-ink:#20242b; --shadow:0 8px 24px rgba(20,24,30,.12);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--steel);font-family:var(--font-body);transition:background .25s,color .25s;}
+  h1,h2,h3,.display{font-family:var(--font-display);text-transform:uppercase;letter-spacing:.03em;}
+  a{color:inherit;}
+  button{font-family:inherit;cursor:pointer;}
+  .mono{font-family:var(--font-mono);}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+  @media (prefers-reduced-motion: reduce){ *{animation-duration:.001s !important; transition-duration:.001s !important;} }
+
+  /* ---------- garage door reveal ---------- */
+  #doorReveal{position:fixed;inset:0;z-index:999;background:
+    repeating-linear-gradient(0deg,#3a3f47 0 14px,#31353c 14px 28px);
+    display:flex;align-items:center;justify-content:center;
+    animation:doorUp .9s .35s cubic-bezier(.6,0,.2,1) forwards;}
+  #doorReveal span{font-family:var(--font-display);color:#ff7a29;font-size:clamp(28px,6vw,48px);letter-spacing:.08em;opacity:.9;}
+  @keyframes doorUp{to{transform:translateY(-100%);}}
+
+  /* ---------- header ---------- */
+  header{position:sticky;top:0;z-index:50;background:var(--bg-panel);border-bottom:1px solid var(--border);}
+  .headbar{max-width:1200px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:12px;}
+  .logo{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:700;white-space:nowrap;}
+  .logo svg{width:30px;height:30px;flex:none;}
+  .logo small{display:block;font-family:var(--font-body);text-transform:none;font-size:10px;letter-spacing:.04em;color:var(--steel-dim);font-weight:500;}
+  .search{flex:1;display:flex;align-items:center;gap:8px;background:var(--bg-panel-2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;min-width:0;}
+  .search input{flex:1;min-width:0;background:transparent;border:0;color:var(--steel);font-size:14px;}
+  .search input:focus{outline:0;}
+  .search svg{flex:none;opacity:.6;}
+  .iconbtn{background:var(--bg-panel-2);border:1px solid var(--border);border-radius:8px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;flex:none;position:relative;color:var(--steel);}
+  .iconbtn:hover{border-color:var(--accent);}
+  .badge{position:absolute;top:-6px;right:-6px;background:var(--accent);color:#1b1b1b;font-size:10px;font-weight:700;border-radius:999px;min-width:16px;height:16px;padding:0 4px;display:flex;align-items:center;justify-content:center;}
+
+  /* ---------- hero ---------- */
+  .hero{max-width:1200px;margin:0 auto;padding:36px 16px 12px;}
+  .hero h1{font-size:clamp(30px,6vw,52px);margin:0 0 6px;line-height:1.02;}
+  .hero p{color:var(--steel-dim);margin:0 0 4px;max-width:560px;font-size:15px;}
+  .hero .note{display:inline-block;margin-top:10px;font-size:12px;background:var(--bg-panel-2);border:1px dashed var(--border);padding:6px 10px;border-radius:999px;color:var(--steel-dim);}
+
+  /* ---------- filters ---------- */
+  .filters{max-width:1200px;margin:18px auto 0;padding:0 16px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+  .chip{border:1px solid var(--border);background:var(--bg-panel);padding:7px 14px;border-radius:999px;font-size:13px;color:var(--steel-dim);font-weight:600;}
+  .chip.active{background:var(--accent);border-color:var(--accent);color:#1b1b1b;}
+  .filters select{margin-left:auto;background:var(--bg-panel);color:var(--steel);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px;}
+
+  /* ---------- grid ---------- */
+  .grid{max-width:1200px;margin:18px auto 60px;padding:0 16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;}
+  .card{background:var(--bg-panel);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;transition:transform .15s,box-shadow .15s;}
+  .card:hover{transform:translateY(-3px);box-shadow:var(--shadow);}
+  .card-media{aspect-ratio:16/10;background:var(--bg-panel-2);position:relative;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+  .card-media svg{width:70%;height:70%;}
+  .fav{position:absolute;top:8px;right:8px;background:rgba(20,20,20,.55);border:0;border-radius:999px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;color:#fff;}
+  .fav.active svg{fill:var(--accent-2);stroke:var(--accent-2);}
+  .stockflag{position:absolute;top:8px;left:8px;font-size:10px;font-weight:700;padding:3px 8px;border-radius:999px;text-transform:uppercase;letter-spacing:.03em;}
+  .stockflag.in{background:var(--success);color:#08260f;}
+  .stockflag.out{background:var(--accent-2);color:#2a0006;}
+  .card-body{padding:12px 12px 14px;display:flex;flex-direction:column;gap:6px;flex:1;}
+  .card-cat{font-size:11px;color:var(--steel-dim);text-transform:uppercase;letter-spacing:.05em;font-weight:600;}
+  .card-name{font-size:16px;font-weight:700;margin:0;cursor:pointer;}
+  .stars{font-size:12px;color:var(--accent);}
+  .stars span{color:var(--border);}
+  .plate{align-self:flex-start;background:var(--plate-bg);color:var(--plate-ink);border:2px solid var(--plate-ink);border-radius:5px;padding:3px 8px;font-family:var(--font-mono);font-weight:700;font-size:15px;letter-spacing:.03em;}
+  .card-actions{display:flex;gap:8px;margin-top:auto;padding-top:6px;}
+  .btn{border:1px solid var(--border);background:var(--bg-panel-2);color:var(--steel);border-radius:8px;padding:9px 12px;font-size:13px;font-weight:600;flex:1;display:flex;align-items:center;justify-content:center;gap:6px;}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#1b1b1b;}
+  .btn.primary:disabled{opacity:.4;}
+  .btn.ghost{flex:none;width:40px;}
+  .btn.danger{background:var(--accent-2);border-color:var(--accent-2);color:#fff;}
+  .btn.small{padding:6px 10px;font-size:12px;flex:none;}
+
+  .empty{max-width:1200px;margin:40px auto;padding:0 16px;text-align:center;color:var(--steel-dim);}
+
+  /* ---------- drawer / modal shared ---------- */
+  .overlay{position:fixed;inset:0;background:rgba(10,10,12,.55);z-index:90;opacity:0;pointer-events:none;transition:opacity .2s;}
+  .overlay.show{opacity:1;pointer-events:auto;}
+  .drawer{position:fixed;top:0;right:0;height:100%;width:min(400px,92vw);background:var(--bg-panel);border-left:1px solid var(--border);z-index:95;transform:translateX(100%);transition:transform .25s ease;display:flex;flex-direction:column;}
+  .drawer.show{transform:translateX(0);}
+  .drawer-head{padding:16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+  .drawer-body{flex:1;overflow-y:auto;padding:12px 16px;}
+  .drawer-foot{padding:16px;border-top:1px solid var(--border);}
+  .cart-row{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);align-items:center;}
+  .cart-row .thumb{width:52px;height:52px;background:var(--bg-panel-2);border-radius:8px;flex:none;display:flex;align-items:center;justify-content:center;}
+  .cart-row .thumb svg{width:70%;}
+  .cart-row .info{flex:1;min-width:0;}
+  .cart-row .info .n{font-weight:700;font-size:14px;}
+  .qty{display:flex;align-items:center;gap:6px;}
+  .qty button{width:24px;height:24px;border-radius:6px;border:1px solid var(--border);background:var(--bg-panel-2);color:var(--steel);}
+  .totalrow{display:flex;justify-content:space-between;font-weight:700;font-size:16px;margin-bottom:10px;}
+
+  .modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.96);width:min(560px,92vw);max-height:88vh;overflow-y:auto;background:var(--bg-panel);border:1px solid var(--border);border-radius:14px;z-index:96;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;}
+  .modal.show{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1);}
+  .modal-head{padding:16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+  .modal-body{padding:16px;}
+  label{display:block;font-size:12px;color:var(--steel-dim);margin:10px 0 4px;font-weight:600;}
+  input[type=text],input[type=number],textarea,select.field{width:100%;background:var(--bg-panel-2);border:1px solid var(--border);color:var(--steel);border-radius:8px;padding:10px;font-size:14px;font-family:inherit;}
+  textarea{resize:vertical;min-height:70px;}
+
+  .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--bg-panel-2);border:1px solid var(--accent);color:var(--steel);padding:12px 18px;border-radius:10px;z-index:200;opacity:0;pointer-events:none;transition:all .25s;font-size:14px;box-shadow:var(--shadow);}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  /* ---------- admin ---------- */
+  .adminbar{background:var(--accent);color:#1b1b1b;font-size:13px;font-weight:700;text-align:center;padding:8px;display:none;}
+  body.admin-on .adminbar{display:block;}
+  .admin-controls{display:none;gap:6px;margin-top:8px;}
+  body.admin-on .admin-controls{display:flex;}
+  .adminfoot{max-width:1200px;margin:0 auto;padding:16px;display:flex;gap:10px;flex-wrap:wrap;}
+
+  footer{border-top:1px solid var(--border);padding:22px 16px;text-align:center;color:var(--steel-dim);font-size:12px;}
+</style>
+</head>
+<body>
+
+<div id="doorReveal"><span>GARASI MOBIL</span></div>
+
+<div class="adminbar">MODE ADMIN AKTIF — perubahan tersimpan di perangkat ini saja</div>
+
+<header>
+  <div class="headbar">
+    <div class="logo">
+      <svg viewBox="0 0 100 100"><path d="M20 62 L28 44 Q32 38 40 38 L60 38 Q68 38 72 44 L80 62 L80 72 Q80 76 76 76 L70 76 Q66 76 66 72 L66 68 L34 68 L34 72 Q34 76 30 76 L24 76 Q20 76 20 72 Z" fill="#ff7a29"/><circle cx="32" cy="68" r="7" fill="#1b1b1b"/><circle cx="68" cy="68" r="7" fill="#1b1b1b"/></svg>
+      <div>GARASI MOBIL<small>koleksi pribadi</small></div>
+    </div>
+    <div class="search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="searchInput" type="text" placeholder="Cari mobil...">
+    </div>
+    <button class="iconbtn" id="themeBtn" title="Ganti tema" aria-label="Ganti tema">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
+    <button class="iconbtn" id="wishBtn" title="Favorit" aria-label="Favorit">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 10-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 000-7.6z"/></svg>
+      <span class="badge" id="wishCount" style="display:none;">0</span>
+    </button>
+    <button class="iconbtn" id="cartBtn" title="Keranjang" aria-label="Keranjang">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 002 1.6h9.7a2 2 0 002-1.6L23 6H6"/></svg>
+      <span class="badge" id="cartCount" style="display:none;">0</span>
+    </button>
+    <button class="iconbtn" id="adminBtn" title="Mode admin" aria-label="Mode admin">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="hero">
+  <h1>Garasi Mobil</h1>
+  <p>Katalog koleksi mobil pribadi. Semua data tersimpan di perangkat ini saja — bukan toko online sungguhan, tidak ada pembayaran nyata.</p>
+  <span class="note">Mode simulasi · data lokal</span>
+  <div class="admin-controls">
+    <button class="btn primary small" id="addCarBtn">+ Tambah mobil</button>
+    <button class="btn small" id="exportBtn">Export JSON</button>
+    <button class="btn small" id="importBtn">Import JSON</button>
+    <input type="file" id="importFile" accept="application/json" style="display:none;">
+  </div>
+</div>
+
+<div class="filters" id="filterBar"></div>
+
+<div class="grid" id="grid"></div>
+<div class="empty" id="emptyState" style="display:none;">Tidak ada mobil yang cocok. Coba kata kunci atau filter lain.</div>
+
+<footer>GARASI MOBIL — proyek pribadi, dibuat untuk simulasi. Tidak terhubung ke sistem pembayaran mana pun.</footer>
+
+<!-- overlay -->
+<div class="overlay" id="overlay"></div>
+
+<!-- cart drawer -->
+<div class="drawer" id="cartDrawer">
+  <div class="drawer-head"><h3 style="margin:0;">Keranjang</h3><button class="iconbtn" id="closeCart">✕</button></div>
+  <div class="drawer-body" id="cartBody"></div>
+  <div class="drawer-foot">
+    <div class="totalrow"><span>Total</span><span class="mono" id="cartTotal">Rp 0</span></div>
+    <button class="btn primary" id="checkoutBtn" style="width:100%;">Checkout (simulasi)</button>
+  </div>
+</div>
+
+<!-- wishlist drawer -->
+<div class="drawer" id="wishDrawer">
+  <div class="drawer-head"><h3 style="margin:0;">Favorit</h3><button class="iconbtn" id="closeWish">✕</button></div>
+  <div class="drawer-body" id="wishBody"></div>
+</div>
+
+<!-- product detail modal -->
+<div class="modal" id="detailModal">
+  <div class="modal-head"><h3 style="margin:0;" id="detailTitle">Detail</h3><button class="iconbtn" id="closeDetail">✕</button></div>
+  <div class="modal-body" id="detailBody"></div>
+</div>
+
+<!-- checkout modal -->
+<div class="modal" id="checkoutModal">
+  <div class="modal-head"><h3 style="margin:0;">Checkout simulasi</h3><button class="iconbtn" id="closeCheckout">✕</button></div>
+  <div class="modal-body">
+    <p style="color:var(--steel-dim);font-size:13px;margin-top:0;">Ini bukan transaksi nyata. Data hanya disimpan sebagai riwayat lokal di perangkat ini.</p>
+    <label>Nama</label><input type="text" id="ckName" placeholder="Nama Anda">
+    <label>Catatan</label><textarea id="ckNote" placeholder="Catatan tambahan (opsional)"></textarea>
+    <button class="btn primary" id="confirmCheckout" style="width:100%;margin-top:14px;">Konfirmasi (simulasi)</button>
+  </div>
+</div>
+
+<!-- add/edit car modal (admin) -->
+<div class="modal" id="carFormModal">
+  <div class="modal-head"><h3 style="margin:0;" id="carFormTitle">Tambah mobil</h3><button class="iconbtn" id="closeCarForm">✕</button></div>
+  <div class="modal-body">
+    <label>Nama mobil</label><input type="text" id="fName">
+    <label>Kategori</label>
+    <select class="field" id="fCat"><option>Sedan</option><option>SUV</option><option>Sport</option><option>MPV</option><option>Klasik</option></select>
+    <label>Harga (Rp)</label><input type="number" id="fPrice">
+    <label>Stok</label><input type="number" id="fStock" value="1">
+    <label>Deskripsi</label><textarea id="fDesc"></textarea>
+    <button class="btn primary" id="saveCarBtn" style="width:100%;margin-top:14px;">Simpan</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------- constants ---------- */
+const LS_PRODUCTS="garasimobil_products", LS_CART="garasimobil_cart", LS_WISH="garasimobil_wish",
+      LS_ORDERS="garasimobil_orders", LS_THEME="garasimobil_theme", LS_ADMIN="garasimobil_admin";
+const CATS=["Sedan","SUV","Sport","MPV","Klasik"];
+const CAT_COLOR={Sedan:"#4f83cc",SUV:"#3fa15e",Sport:"#c8102e",MPV:"#a06a2c",Klasik:"#8a6d3b"};
+
+function carSVG(color){
+  return `<svg viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg">
+    <path d="M8 40 L16 20 Q20 14 30 14 L70 14 Q80 14 84 20 L92 40 L92 48 Q92 52 88 52 L82 52 Q78 52 78 48 L78 44 L22 44 L22 48 Q22 52 18 52 L12 52 Q8 52 8 48 Z" fill="${color}"/>
+    <path d="M28 20 L34 14 L66 14 L72 20 Z" fill="rgba(255,255,255,.25)"/>
+    <circle cx="26" cy="48" r="8" fill="#20242b"/><circle cx="26" cy="48" r="3" fill="#8a8f97"/>
+    <circle cx="74" cy="48" r="8" fill="#20242b"/><circle cx="74" cy="48" r="3" fill="#8a8f97"/>
+  </svg>`;
+}
+
+const seedProducts=[
+ {id:"gm1",name:"Sedan Elegan 1.8",cat:"Sedan",price:245000000,stock:2,rating:4.5,desc:"Sedan harian yang halus dan irit, cocok untuk koleksi kota."},
+ {id:"gm2",name:"SUV Tangguh 4x4",cat:"SUV",price:410000000,stock:1,rating:4.7,desc:"SUV bertenaga untuk medan berat maupun jalan tol."},
+ {id:"gm3",name:"Roadster Sport V6",cat:"Sport",price:890000000,stock:0,rating:4.9,desc:"Mobil sport dua pintu, akselerasi cepat, untuk akhir pekan."},
+ {id:"gm4",name:"MPV Keluarga 7-Seat",cat:"MPV",price:295000000,stock:3,rating:4.3,desc:"Kabin luas tujuh penumpang, nyaman untuk perjalanan jauh."},
+ {id:"gm5",name:"Klasik Restorasi '68",cat:"Klasik",price:520000000,stock:1,rating:4.8,desc:"Unit klasik hasil restorasi penuh, kondisi mesin prima."},
+ {id:"gm6",name:"Sedan Sport Turbo",cat:"Sedan",price:610000000,stock:1,rating:4.6,desc:"Sedan performa tinggi dengan mesin turbo empat silinder."},
+];
+
+/* ---------- state ---------- */
+let products = load(LS_PRODUCTS, seedProducts);
+let cart = load(LS_CART, []);       // [{id, qty}]
+let wish = load(LS_WISH, []);       // [id]
+let activeCat = "Semua";
+let query = "";
+let editingId = null;
+
+function load(key, fallback){ try{ const v=localStorage.getItem(key); return v?JSON.parse(v):fallback; }catch(e){ return fallback; } }
+function save(key, val){ localStorage.setItem(key, JSON.stringify(val)); }
+function rupiah(n){ return "Rp " + n.toLocaleString("id-ID"); }
+function toast(msg){ const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove("show"),2200); }
+
+/* ---------- theme ---------- */
+function initTheme(){
+  const t = localStorage.getItem(LS_THEME) || "dark";
+  document.documentElement.classList.toggle("light", t==="light");
+}
+document.getElementById("themeBtn").addEventListener("click", ()=>{
+  const isLight = document.documentElement.classList.toggle("light");
+  localStorage.setItem(LS_THEME, isLight?"light":"dark");
+});
+
+/* ---------- admin ---------- */
+function initAdmin(){ document.body.classList.toggle("admin-on", localStorage.getItem(LS_ADMIN)==="1"); }
+document.getElementById("adminBtn").addEventListener("click", ()=>{
+  const on = document.body.classList.toggle("admin-on");
+  localStorage.setItem(LS_ADMIN, on?"1":"0");
+  toast(on? "Mode admin aktif" : "Mode admin nonaktif");
+  renderGrid();
+});
+
+/* ---------- filters ---------- */
+function renderFilters(){
+  const bar=document.getElementById("filterBar");
+  const cats=["Semua",...CATS];
+  bar.innerHTML = cats.map(c=>`<button class="chip ${c===activeCat?'active':''}" data-cat="${c}">${c}</button>`).join("")
+    + `<select id="sortSel">
+        <option value="new">Terbaru</option>
+        <option value="low">Harga terendah</option>
+        <option value="high">Harga tertinggi</option>
+        <option value="az">Nama A-Z</option>
+      </select>`;
+  bar.querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>{activeCat=b.dataset.cat; renderFilters(); renderGrid();}));
+  document.getElementById("sortSel").addEventListener("change", renderGrid);
+}
+
+/* ---------- grid ---------- */
+function getFiltered(){
+  let list = products.filter(p=>
+    (activeCat==="Semua"||p.cat===activeCat) &&
+    p.name.toLowerCase().includes(query.toLowerCase())
+  );
+  const sort = document.getElementById("sortSel") ? document.getElementById("sortSel").value : "new";
+  if(sort==="low") list=[...list].sort((a,b)=>a.price-b.price);
+  if(sort==="high") list=[...list].sort((a,b)=>b.price-a.price);
+  if(sort==="az") list=[...list].sort((a,b)=>a.name.localeCompare(b.name));
+  return list;
+}
+
+function starRow(rating){
+  let out="";
+  for(let i=1;i<=5;i++){ out += i<=Math.round(rating) ? "★" : "<span>★</span>"; }
+  return `<div class="stars">${out} <span class="mono" style="color:var(--steel-dim);font-size:11px;">${rating.toFixed(1)}</span></div>`;
+}
+
+function renderGrid(){
+  const grid=document.getElementById("grid");
+  const list=getFiltered();
+  document.getElementById("emptyState").style.display = list.length? "none":"block";
+  grid.innerHTML = list.map(p=>{
+    const inWish = wish.includes(p.id);
+    const inStock = p.stock>0;
+    return `<div class="card" data-id="${p.id}">
+      <div class="card-media" data-open="${p.id}">
+        ${carSVG(CAT_COLOR[p.cat]||"#888")}
+        <span class="stockflag ${inStock?'in':'out'}">${inStock? p.stock+" unit":"Kosong"}</span>
+        <button class="fav ${inWish?'active':''}" data-wish="${p.id}" aria-label="Favorit">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 10-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 000-7.6z"/></svg>
+        </button>
+      </div>
+      <div class="card-body">
+        <div class="card-cat">${p.cat}</div>
+        <p class="card-name" data-open="${p.id}">${p.name}</p>
+        ${starRow(p.rating)}
+        <div class="plate">${rupiah(p.price)}</div>
+        <div class="card-actions">
+          <button class="btn primary" data-add="${p.id}" ${inStock?"":"disabled"}>${inStock?"+ Keranjang":"Kosong"}</button>
+          ${document.body.classList.contains('admin-on') ? `<button class="btn ghost" data-edit="${p.id}" title="Edit">✎</button><button class="btn ghost danger" data-del="${p.id}" title="Hapus">🗑</button>` : ""}
+        </div>
+      </div>
+    </div>`;
+  }).join("");
+
+  grid.querySelectorAll("[data-open]").forEach(el=>el.addEventListener("click",()=>openDetail(el.dataset.open)));
+  grid.querySelectorAll("[data-wish]").forEach(el=>el.addEventListener("click",(e)=>{e.stopPropagation();toggleWish(el.dataset.wish);}));
+  grid.querySelectorAll("[data-add]").forEach(el=>el.addEventListener("click",(e)=>{e.stopPropagation();addToCart(el.dataset.add);}));
+  grid.querySelectorAll("[data-edit]").forEach(el=>el.addEventListener("click",(e)=>{e.stopPropagation();openCarForm(el.dataset.edit);}));
+  grid.querySelectorAll("[data-del]").forEach(el=>el.addEventListener("click",(e)=>{e.stopPropagation();deleteCar(el.dataset.del);}));
+}
+
+/* ---------- wishlist ---------- */
+function toggleWish(id){
+  wish = wish.includes(id) ? wish.filter(x=>x!==id) : [...wish, id];
+  save(LS_WISH, wish); updateBadges(); renderGrid(); renderWishDrawer();
+}
+function renderWishDrawer(){
+  const body=document.getElementById("wishBody");
+  const items = products.filter(p=>wish.includes(p.id));
+  body.innerHTML = items.length ? items.map(p=>`
+    <div class="cart-row">
+      <div class="thumb">${carSVG(CAT_COLOR[p.cat])}</div>
+      <div class="info"><div class="n">${p.name}</div><div class="mono" style="font-size:13px;">${rupiah(p.price)}</div></div>
+      <button class="iconbtn" data-unwish="${p.id}">✕</button>
+    </div>`).join("") : `<p style="color:var(--steel-dim);">Belum ada favorit.</p>`;
+  body.querySelectorAll("[data-unwish]").forEach(el=>el.addEventListener("click",()=>toggleWish(el.dataset.unwish)));
+}
+
+/* ---------- cart ---------- */
+function addToCart(id){
+  const p = products.find(x=>x.id===id);
+  if(!p || p.stock<=0) return;
+  const row = cart.find(c=>c.id===id);
+  if(row) row.qty++; else cart.push({id, qty:1});
+  save(LS_CART, cart); updateBadges(); toast(p.name+" ditambahkan ke keranjang"); renderCartDrawer();
+}
+function changeQty(id, delta){
+  const row = cart.find(c=>c.id===id); if(!row) return;
+  row.qty += delta;
+  if(row.qty<=0) cart = cart.filter(c=>c.id!==id);
+  save(LS_CART, cart); updateBadges(); renderCartDrawer();
+}
+function removeFromCart(id){ cart = cart.filter(c=>c.id!==id); save(LS_CART, cart); updateBadges(); renderCartDrawer(); }
+
+function renderCartDrawer(){
+  const body=document.getElementById("cartBody");
+  let total=0;
+  body.innerHTML = cart.length ? cart.map(c=>{
+    const p = products.find(x=>x.id===c.id); if(!p) return "";
+    total += p.price*c.qty;
+    return `<div class="cart-row">
+      <div class="thumb">${carSVG(CAT_COLOR[p.cat])}</div>
+      <div class="info">
+        <div class="n">${p.name}</div>
+        <div class="mono" style="font-size:13px;">${rupiah(p.price)}</div>
+        <div class="qty">
+          <button data-dec="${p.id}">−</button><span class="mono">${c.qty}</span><button data-inc="${p.id}">+</button>
+        </div>
+      </div>
+      <button class="iconbtn" data-rm="${p.id}">✕</button>
+    </div>`;
+  }).join("") : `<p style="color:var(--steel-dim);">Keranjang kosong.</p>`;
+  document.getElementById("cartTotal").textContent = rupiah(total);
+  body.querySelectorAll("[data-inc]").forEach(el=>el.addEventListener("click",()=>changeQty(el.dataset.inc,1)));
+  body.querySelectorAll("[data-dec]").forEach(el=>el.addEventListener("click",()=>changeQty(el.dataset.dec,-1)));
+  body.querySelectorAll("[data-rm]").forEach(el=>el.addEventListener("click",()=>removeFromCart(el.dataset.rm)));
+  document.getElementById("checkoutBtn").disabled = cart.length===0;
+}
+
+function updateBadges(){
+  const cc=document.getElementById("cartCount"), wc=document.getElementById("wishCount");
+  const cartQty = cart.reduce((s,c)=>s+c.qty,0);
+  cc.style.display = cartQty? "flex":"none"; cc.textContent = cartQty;
+  wc.style.display = wish.length? "flex":"none"; wc.textContent = wish.length;
+}
+
+/* ---------- detail modal ---------- */
+function openDetail(id){
+  const p = products.find(x=>x.id===id); if(!p) return;
+  document.getElementById("detailTitle").textContent = p.name;
+  document.getElementById("detailBody").innerHTML = `
+    <div style="background:var(--bg-panel-2);border-radius:10px;padding:20px;margin-bottom:14px;">${carSVG(CAT_COLOR[p.cat])}</div>
+    ${starRow(p.rating)}
+    <p style="color:var(--steel-dim);">${p.desc||""}</p>
+    <div class="plate" style="font-size:20px;margin:10px 0;">${rupiah(p.price)}</div>
+    <p style="font-size:13px;color:var(--steel-dim);">Kategori: ${p.cat} · Stok: ${p.stock}</p>
+    <button class="btn primary" style="width:100%;" ${p.stock>0?"":"disabled"} id="detailAdd">${p.stock>0? "+ Tambah ke keranjang":"Stok kosong"}</button>
+  `;
+  document.getElementById("detailAdd").addEventListener("click",()=>{addToCart(p.id); closeAll();});
+  openModal("detailModal");
+}
+
+/* ---------- checkout ---------- */
+document.getElementById("checkoutBtn").addEventListener("click", ()=>{ if(cart.length) { closeDrawers(); openModal("checkoutModal"); }});
+document.getElementById("confirmCheckout").addEventListener("click", ()=>{
+  const name = document.getElementById("ckName").value.trim() || "Tanpa nama";
+  const note = document.getElementById("ckNote").value.trim();
+  const total = cart.reduce((s,c)=>{ const p=products.find(x=>x.id===c.id); return s + (p?p.price*c.qty:0); },0);
+  const order = { id:"ord_"+Date.now(), name, note, items: cart.map(c=>({...c})), total, date: new Date().toISOString() };
+  const orders = load(LS_ORDERS, []); orders.unshift(order); save(LS_ORDERS, orders);
+  cart = []; save(LS_CART, cart); updateBadges(); renderCartDrawer();
+  document.getElementById("ckName").value=""; document.getElementById("ckNote").value="";
+  closeAll(); toast("Pesanan disimulasikan & tersimpan lokal ✔");
+});
+
+/* ---------- admin: add/edit/delete ---------- */
+function openCarForm(id){
+  editingId = id || null;
+  const p = id ? products.find(x=>x.id===id) : null;
+  document.getElementById("carFormTitle").textContent = p ? "Edit mobil" : "Tambah mobil";
+  document.getElementById("fName").value = p? p.name : "";
+  document.getElementById("fCat").value = p? p.cat : "Sedan";
+  document.getElementById("fPrice").value = p? p.price : "";
+  document.getElementById("fStock").value = p? p.stock : 1;
+  document.getElementById("fDesc").value = p? p.desc||"" : "";
+  openModal("carFormModal");
+}
+document.getElementById("addCarBtn").addEventListener("click", ()=>openCarForm(null));
+document.getElementById("saveCarBtn").addEventListener("click", ()=>{
+  const name=document.getElementById("fName").value.trim();
+  if(!name){ toast("Nama mobil wajib diisi"); return; }
+  const data = {
+    name, cat:document.getElementById("fCat").value,
+    price: Number(document.getElementById("fPrice").value)||0,
+    stock: Number(document.getElementById("fStock").value)||0,
+    desc: document.getElementById("fDesc").value.trim(),
+  };
+  if(editingId){
+    const p = products.find(x=>x.id===editingId); Object.assign(p, data);
+  } else {
+    products.push({ id:"gm_"+Date.now(), rating:4.5, ...data });
+  }
+  save(LS_PRODUCTS, products); closeAll(); renderGrid(); toast("Data mobil disimpan");
+});
+function deleteCar(id){
+  if(!confirm("Hapus mobil ini dari garasi?")) return;
+  products = products.filter(p=>p.id!==id);
+  save(LS_PRODUCTS, products); renderGrid(); toast("Mobil dihapus");
+}
+
+/* ---------- export / import ---------- */
+document.getElementById("exportBtn").addEventListener("click", ()=>{
+  const blob = new Blob([JSON.stringify(products,null,2)], {type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = "garasi-mobil-data.json"; a.click();
+});
+document.getElementById("importBtn").addEventListener("click", ()=>document.getElementById("importFile").click());
+document.getElementById("importFile").addEventListener("change", (e)=>{
+  const file = e.target.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ()=>{
+    try{
+      const data = JSON.parse(reader.result);
+      if(Array.isArray(data)){ products = data; save(LS_PRODUCTS, products); renderGrid(); toast("Data berhasil diimpor"); }
+      else toast("Format file tidak valid");
+    }catch(err){ toast("Gagal membaca file JSON"); }
+  };
+  reader.readAsText(file);
+  e.target.value = "";
+});
+
+/* ---------- modal/drawer plumbing ---------- */
+function openModal(id){ document.getElementById("overlay").classList.add("show"); document.getElementById(id).classList.add("show"); }
+function openDrawer(id){ document.getElementById("overlay").classList.add("show"); document.getElementById(id).classList.add("show"); }
+function closeAll(){
+  document.getElementById("overlay").classList.remove("show");
+  document.querySelectorAll(".modal,.drawer").forEach(m=>m.classList.remove("show"));
+}
+function closeDrawers(){ document.querySelectorAll(".drawer").forEach(m=>m.classList.remove("show")); document.getElementById("overlay").classList.remove("show"); }
+document.getElementById("overlay").addEventListener("click", closeAll);
+document.getElementById("closeCart").addEventListener("click", closeAll);
+document.getElementById("closeWish").addEventListener("click", closeAll);
+document.getElementById("closeDetail").addEventListener("click", closeAll);
+document.getElementById("closeCheckout").addEventListener("click", closeAll);
+document.getElementById("closeCarForm").addEventListener("click", closeAll);
+document.getElementById("cartBtn").addEventListener("click", ()=>{ renderCartDrawer(); openDrawer("cartDrawer"); });
+document.getElementById("wishBtn").addEventListener("click", ()=>{ renderWishDrawer(); openDrawer("wishDrawer"); });
+
+/* ---------- search ---------- */
+document.getElementById("searchInput").addEventListener("input", (e)=>{ query=e.target.value; renderGrid(); });
+
+/* ---------- init ---------- */
+initTheme(); initAdmin(); renderFilters(); updateBadges(); renderGrid();
+setTimeout(()=>{ const d=document.getElementById("doorReveal"); if(d){ d.style.pointerEvents="none"; setTimeout(()=>d.remove(),1000); } }, 300);
+
+})();
+</script>
+</body>
+</html>
